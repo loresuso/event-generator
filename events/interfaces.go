@@ -48,7 +48,9 @@ type Helper interface {
 
 	// SpawnAs starts a child process and waits for it to complete.
 	// The child runs the given action as a different program name.
-	SpawnAs(name string, action string, args ...string) error
+	// The copy parameter control wheter to copy the binary or symlink it.
+	// This makes it easier to deal with rules using proc.name or proc.exepath.
+	SpawnAs(name string, action string, copy bool, args ...string) error
 
 	// Spawned returns true if the action is running in a child process.
 	Spawned() bool

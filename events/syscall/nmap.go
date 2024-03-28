@@ -14,16 +14,10 @@ limitations under the License.
 
 package syscall
 
-import (
-	"github.com/falcosecurity/event-generator/events"
-	_ "github.com/falcosecurity/event-generator/events/helper"
-)
+import "github.com/falcosecurity/event-generator/events"
 
-var _ = events.Register(
-	SystemProcsNetworkActivity,
-	events.WithDisabled(), // this rules is not included in falco_rules.yaml (stable rules), so disable the action
-)
+var _ = events.Register(Nmap)
 
-func SystemProcsNetworkActivity(h events.Helper) error {
-	return h.SpawnAs("sha1sum", "helper.NetworkActivity", false)
+func Nmap(h events.Helper) error {
+	return h.SpawnAs("nmap", "helper.ExecLs", true)
 }
