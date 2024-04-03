@@ -14,10 +14,17 @@ limitations under the License.
 
 package syscall
 
-import "github.com/falcosecurity/event-generator/events"
+import (
+	"log"
 
-var _ = events.Register(Nmap)
+	"github.com/falcosecurity/event-generator/events"
+)
 
-func Nmap(h events.Helper) error {
-	return h.SpawnAs("nmap", "helper.DoNothing", true)
+var _ = events.Register(NetcatRemoteCodeExecutionInContainer)
+
+func NetcatRemoteCodeExecutionInContainer(h events.Helper) error {
+	if !h.InContainer() {
+		log.Fatal("syscall.NetcatRemoteCodeExecutionInContainer must be run in a container")
+	}
+	return h.SpawnAs("nc", "helper.DoNothing", false, "-e", "/bin/sh", "-lp", "1337")
 }
